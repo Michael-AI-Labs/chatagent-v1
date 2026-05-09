@@ -9,5 +9,5 @@ router = APIRouter()
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    response = await handle_chat(request.message)
+    response = await handle_chat(request.message, request.messages)
     return ChatResponse(response=response)
