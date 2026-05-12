@@ -3,6 +3,7 @@ import streamlit as st
 
 
 API_URL = "http://127.0.0.1:8000/chat"
+MAX_HISTORY = 30
 
 
 st.set_page_config(
@@ -13,9 +14,18 @@ st.set_page_config(
 st.title("🤖 ChatAgentv1")
 st.caption("Streamlit UI → FastAPI → OpenAI Agents SDK")
 
+if st.button("🗑️ Clear Chat"):
+    st.session_state.messages = []
+    st.rerun()
+
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [
+        {
+            "role": "assistant",
+            "content": "Hello! I'm ChatAgentv1. How can I help you today?"
+        }
+    ]
 
 
 for message in st.session_state.messages:
@@ -30,6 +40,7 @@ if user_message:
     st.session_state.messages.append(
         {"role": "user", "content": user_message}
     )
+    conversation_history = st.session_state.messages[-MAX_HISTORY:]
 
     with st.chat_message("user"):
         st.markdown(user_message)
@@ -41,7 +52,7 @@ if user_message:
                     API_URL,
                     json={
                         "message": user_message,
-                        "messages": st.session_state.messages,
+                        "messages": conversation_history,
                     },
                     timeout=30,
                 )
