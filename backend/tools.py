@@ -1,7 +1,12 @@
 from datetime import datetime
 
+from agents import WebSearchTool
 from agents import function_tool
 
+web_search_tool = WebSearchTool(
+    search_context_size="high",
+    external_web_access=True,
+)
 
 @function_tool
 def calculator(expression: str) -> str:

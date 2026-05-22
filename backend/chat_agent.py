@@ -1,9 +1,11 @@
 from agents import Agent, ModelSettings
 
+
 from tools import (
     calculator,
     current_time,
     unit_converter,
+    web_search_tool,
 )
 
 
@@ -44,6 +46,20 @@ conversion_agent = Agent(
         "Use the unit_converter tool for unit conversions."
     ),
     tools=[unit_converter],
+    model="gpt-4.1-mini",
+    model_settings=ModelSettings(tool_choice="required"),
+)
+
+search_agent = Agent(
+    name="SearchAgent",
+    instructions=(
+        "You are a web-enabled assistant for live or recent information. "
+        "For weather, sports, news, current events, recent facts, or anything "
+        "time-sensitive, use the web_search tool before answering. "
+        "Base the answer on the search results, cite the relevant sources inline "
+        "when possible, and do not claim you lack browsing access."
+    ),
+    tools=[web_search_tool],
     model="gpt-4.1-mini",
     model_settings=ModelSettings(tool_choice="required"),
 )
